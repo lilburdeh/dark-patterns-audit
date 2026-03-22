@@ -1,0 +1,64 @@
+# ===== SECRETS =====
+.env
+
+# ===== PYTHON =====
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# ===== MACOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ===== R =====
+.Rhistory
+.RData
+
+# ===== CLAUDE CODE =====
+# Machine-specific permissions — not portable across developers
+.claude/settings.local.json
+
+# Generic Claude skills not specific to this project (10MB of system skills)
+.claude/skills/algorithmic-art/
+.claude/skills/brand-guidelines/
+.claude/skills/canvas-design/
+.claude/skills/claude-api/
+.claude/skills/doc-coauthoring/
+.claude/skills/docx/
+.claude/skills/frontend-design/
+.claude/skills/internal-comms/
+.claude/skills/mcp-builder/
+.claude/skills/pdf/
+.claude/skills/pptx/
+.claude/skills/skill-creator/
+.claude/skills/slack-gif-creator/
+.claude/skills/theme-factory/
+.claude/skills/web-artifacts-builder/
+.claude/skills/webapp-testing/
+.claude/skills/xlsx/
+
+# ===== GENERATED AUDIT REPORTS =====
+# Exclude real audit outputs (may contain client/sensitive data).
+# The reference sample report in reports/ is committed intentionally.
+reports/*.md
+!reports/audit-bellroy-tech-kit-product-page-2026-03-17.md
+
+# ===== EDITOR =====
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,580 @@
+{
+  "version": "1.0",
+  "source": "Gray et al. (2024) CHI Ontology",
+  "citation": "Gray, C. M., Santos, C., Bielova, N., & Mildner, T. (2024). An Ontology of Dark Patterns Knowledge. Proceedings of the CHI Conference on Human Factors in Computing Systems (CHI '24), ACM.",
+  "regulatory_mappings": {
+    "EDPB": { "name": "EDPB Guidelines 03/2022 on Dark Patterns in Social Media", "jurisdiction": "EU (GDPR)", "categories": ["Overloading", "Skipping", "Stirring", "Obstructing", "Fickle", "Left in the Dark"] },
+    "CMA": { "name": "CMA Online Choice Architecture Discussion Paper (2022)", "jurisdiction": "UK", "categories": ["Choice Structure", "Choice Information", "Choice Pressure"] },
+    "DSA": { "name": "EU Digital Services Act Article 25", "jurisdiction": "EU", "violation_types": ["Deception", "Manipulation", "Distortion/Impairment of Autonomy"] },
+    "FTC": { "name": "FTC Report: Bringing Dark Patterns to Light (2022)", "jurisdiction": "US", "categories": ["Endorsements", "Design tricks to mislead", "Making it difficult to cancel", "Burying key terms"] }
+  },
+  "strategies": [
+    {
+      "id": "S1",
+      "name": "Obstruction",
+      "level": "high",
+      "definition": "Making a process more difficult than it needs to be, with the intent to dissuade certain actions.",
+      "regulatory_refs": [
+        { "framework": "EDPB", "category": "Obstructing" },
+        { "framework": "CMA", "category": "Choice Structure" },
+        { "framework": "DSA", "category": "Distortion/Impairment of Autonomy" },
+        { "framework": "FTC", "category": "Making it difficult to cancel" }
+      ],
+      "angles": [
+        {
+          "id": "S1.A1",
+          "name": "Roach Motel",
+          "level": "meso",
+          "definition": "A design that makes it easy to get into a situation but difficult to get out of it.",
+          "what_to_look_for": "Easy signup but buried/complex cancellation; simple opt-in but multi-step opt-out; asymmetric effort between joining and leaving.",
+          "patterns": [
+            {
+              "id": "S1.A1.P1",
+              "name": "Immortal Accounts",
+              "level": "low",
+              "definition": "Making it impossible or extremely difficult to delete an account or terminate a service.",
+              "visual_indicators": "No visible delete account option; delete buried deep in settings; deletion requires contacting support by phone/mail; 'deactivate' offered instead of true deletion.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S1.A1.P2",
+              "name": "Dead End",
+              "level": "low",
+              "definition": "A path in a user flow that leads to no meaningful outcome, wasting the user's effort.",
+              "visual_indicators": "Links that lead to unhelpful pages; 'learn more' buttons that go nowhere useful; circular navigation in help/support flows.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S1.A2",
+          "name": "Creating Barriers",
+          "level": "meso",
+          "definition": "Introducing unnecessary steps or obstacles that prevent users from achieving their desired outcome efficiently.",
+          "what_to_look_for": "Extra verification steps only for undesired actions; requiring phone calls for what could be done online; unnecessary form fields.",
+          "patterns": [
+            {
+              "id": "S1.A2.P1",
+              "name": "Price Comparison Prevention",
+              "level": "low",
+              "definition": "Making it deliberately difficult to compare prices, whether between products on the same site or across different sites.",
+              "visual_indicators": "Non-standard unit pricing; bundled pricing that obscures per-item cost; different pricing structures for similar products; blocking price-comparison tools.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S1.A2.P2",
+              "name": "Intermediate Currency",
+              "level": "low",
+              "definition": "Using a virtual currency or token system to obscure the real monetary cost of items or actions.",
+              "visual_indicators": "Points, gems, coins, credits instead of real currency; conversion rates that are hard to calculate; purchasing virtual currency in bundles that don't align with item prices.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S1.A3",
+          "name": "Adding Steps",
+          "level": "meso",
+          "definition": "Injecting unnecessary additional steps to a process to discourage completion.",
+          "what_to_look_for": "Multi-page forms for simple actions; requiring re-entry of information already provided; extra confirmation screens only for opt-out actions.",
+          "patterns": [
+            {
+              "id": "S1.A3.P1",
+              "name": "Privacy Maze",
+              "level": "low",
+              "definition": "Making privacy settings or information scattered, confusing, and requiring many steps to navigate.",
+              "visual_indicators": "Privacy controls spread across multiple settings pages; no single privacy dashboard; needing many clicks to find or change privacy preferences.",
+              "severity_default": "Medium"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "name": "Sneaking",
+      "level": "high",
+      "definition": "Attempting to hide, disguise, or delay the disclosure of information relevant to the user's decision-making.",
+      "regulatory_refs": [
+        { "framework": "EDPB", "category": "Skipping" },
+        { "framework": "CMA", "category": "Choice Information" },
+        { "framework": "DSA", "category": "Deception" },
+        { "framework": "FTC", "category": "Burying key terms" }
+      ],
+      "angles": [
+        {
+          "id": "S2.A1",
+          "name": "Bait and Switch",
+          "level": "meso",
+          "definition": "Presenting one option or outcome, but substituting a different, less desirable one when the user acts.",
+          "what_to_look_for": "Advertised product/feature differs from what's delivered; clicking one action triggers a different action; terms change after initial agreement.",
+          "patterns": [
+            {
+              "id": "S2.A1.P1",
+              "name": "Disguised Ad",
+              "level": "low",
+              "definition": "Advertising content disguised as navigation, content, or other non-advertising interface elements.",
+              "visual_indicators": "'Download' buttons that are actually ads; sponsored content without clear labeling; ads styled to look like search results or articles; native ads that mimic editorial content.",
+              "severity_default": "High"
+            }
+          ]
+        },
+        {
+          "id": "S2.A2",
+          "name": "Hiding Information",
+          "level": "meso",
+          "definition": "Deliberately concealing or delaying the presentation of relevant information.",
+          "what_to_look_for": "Costs revealed late in checkout; terms hidden behind expandable sections; important conditions in fine print.",
+          "patterns": [
+            {
+              "id": "S2.A2.P1",
+              "name": "Sneak into Basket",
+              "level": "low",
+              "definition": "Adding extra items, services, or charges to a user's shopping cart without their explicit consent.",
+              "visual_indicators": "Pre-added items in cart; insurance or warranties auto-added; donation or tip auto-included; additional services checked by default during checkout.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S2.A2.P2",
+              "name": "Drip Pricing / Hidden Costs / Partitioned Pricing",
+              "level": "low",
+              "definition": "Revealing additional mandatory fees, charges, or price components incrementally throughout the purchase process rather than upfront.",
+              "visual_indicators": "Base price shown initially, taxes/fees/service charges added later; 'from $X' pricing where final price is significantly higher; mandatory charges revealed at checkout; separate booking/processing/service fees.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S2.A2.P3",
+              "name": "Reference Pricing",
+              "level": "low",
+              "definition": "Displaying inflated original prices alongside discounted prices to create a misleading impression of value.",
+              "visual_indicators": "Crossed-out 'original' prices that were never charged; permanent 'sale' pricing; inflated 'was' prices; 'compare at' prices from unknown sources.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S2.A3",
+          "name": "(De)contextualizing Cues",
+          "level": "meso",
+          "definition": "Presenting information in a way that strips it of relevant context or adds misleading context.",
+          "what_to_look_for": "Statistics without source or baseline; claims presented without qualifying conditions; information framed to mislead.",
+          "patterns": [
+            {
+              "id": "S2.A3.P1",
+              "name": "Conflicting Information",
+              "level": "low",
+              "definition": "Presenting contradictory information in different parts of the interface, causing confusion.",
+              "visual_indicators": "Different prices on product page vs. cart; contradictory terms in different sections; inconsistent descriptions of features or policies.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S2.A3.P2",
+              "name": "Information without Context",
+              "level": "low",
+              "definition": "Presenting data or claims without the necessary context to interpret them accurately.",
+              "visual_indicators": "'Save 50%' without stating original price; star ratings without number of reviews; 'most popular' without defining the metric; claims without sources.",
+              "severity_default": "Low"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "name": "Interface Interference",
+      "level": "high",
+      "definition": "Manipulating the user interface in ways that privilege certain actions over others, thereby confusing the user or limiting discoverability of important information.",
+      "regulatory_refs": [
+        { "framework": "EDPB", "categories": ["Stirring", "Overloading", "Left in the Dark"] },
+        { "framework": "CMA", "categories": ["Choice Structure", "Choice Information"] },
+        { "framework": "DSA", "category": "Manipulation" },
+        { "framework": "FTC", "category": "Design tricks to mislead" }
+      ],
+      "angles": [
+        {
+          "id": "S3.A1",
+          "name": "Manipulating Choice Architecture",
+          "level": "meso",
+          "definition": "Structuring the presentation of choices to steer users toward a particular option.",
+          "what_to_look_for": "Options arranged to favor the more profitable choice; visual or spatial hierarchy that directs attention; decoy options.",
+          "patterns": [
+            {
+              "id": "S3.A1.P1",
+              "name": "False Hierarchy",
+              "level": "low",
+              "definition": "Using visual design to give certain options prominence over others, making the preferred option appear to be the default or best choice.",
+              "visual_indicators": "One button large/colored and another small/grey; 'Recommended' or 'Best Value' labels on the most expensive option; visual emphasis (size, color, position) on the desired action.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S3.A1.P2",
+              "name": "Visual Prominence",
+              "level": "low",
+              "definition": "Using color, size, contrast, or positioning to make certain elements more noticeable while downplaying others.",
+              "visual_indicators": "Accept/agree buttons in bright colors, decline in grey text; large 'Subscribe' vs tiny 'No thanks'; high-contrast call-to-action vs low-contrast alternative.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S3.A1.P3",
+              "name": "Bundling",
+              "level": "low",
+              "definition": "Grouping products or services together so users cannot select only what they want.",
+              "visual_indicators": "Features only available in expensive tiers; required add-ons; inability to purchase individual items from a bundle; all-or-nothing packages.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S3.A1.P4",
+              "name": "Pressured Selling",
+              "level": "low",
+              "definition": "Aggressive promotion of upgrades, add-ons, or premium options during the user's primary task.",
+              "visual_indicators": "Upsell screens inserted in checkout; 'Are you sure?' when declining upgrades; multiple upsell attempts; premium features prominently shown during basic task flow.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S3.A2",
+          "name": "Bad Defaults",
+          "level": "meso",
+          "definition": "Setting default options to the choice that benefits the service rather than the user.",
+          "what_to_look_for": "Pre-checked consent boxes for marketing emails or data sharing; opt-out rather than opt-in for newsletters; cookie consent banners with 'Accept All' pre-selected or as only prominent option; default settings that maximise data sharing or notifications; auto-enrollment in paid services or premium tiers; pre-selected add-ons in checkout (insurance, warranties, donations); toggle switches set to 'on' for data sharing by default. In HTML: look for `checked` attribute on checkboxes for marketing consent, pre-selected radio buttons favouring the service, hidden form fields with default values that share data.",
+          "detection_examples": ["Cookie banner with 'Accept All' prominent and 'Manage Preferences' in small grey text", "Newsletter signup checkbox pre-ticked during account creation", "Data sharing toggle set to 'on' by default in privacy settings"],
+          "patterns": []
+        },
+        {
+          "id": "S3.A3",
+          "name": "Emotional or Sensory Manipulation",
+          "level": "meso",
+          "definition": "Using emotional appeals, visuals, or sensory elements to influence user decisions beyond rational consideration.",
+          "what_to_look_for": "Guilt-inducing imagery; celebratory animations after spending; sad faces or imagery when declining; emotional language.",
+          "patterns": [
+            {
+              "id": "S3.A3.P1",
+              "name": "Cuteness",
+              "level": "low",
+              "definition": "Using cute or endearing visual elements (mascots, characters, animations) to manipulate user emotions and decisions.",
+              "visual_indicators": "Sad mascot when unsubscribing; cute characters encouraging purchases; playful animations that make spending feel fun.",
+              "severity_default": "Low"
+            },
+            {
+              "id": "S3.A3.P2",
+              "name": "Positive or Negative Framing",
+              "level": "low",
+              "definition": "Describing the same choice in positive terms for the desired action and negative terms for the undesired action.",
+              "visual_indicators": "'Yes, protect my order' vs 'No, I don't want protection'; 'Get premium features' vs 'Continue with limited access'; framing decline options negatively.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S3.A4",
+          "name": "Trick Questions",
+          "level": "meso",
+          "definition": "Using confusing language, double negatives, or ambiguous wording to mislead users into making unintended choices.",
+          "what_to_look_for": "Double negatives in opt-out checkboxes (e.g., 'Uncheck to not receive...'); confusing phrasing where checking a box means the opposite of what's expected; questions worded so that 'yes' means accepting and 'no' is ambiguous; toggle labels that reverse meaning when toggled; consent forms where the action of the checkbox contradicts its label; multi-clause consent statements combining unrelated permissions; inverted logic where 'opting out' requires affirmative action. EDPB classifies this under 'Overloading' — overwhelming users with information to confuse consent choices.",
+          "detection_examples": ["Checkbox labelled 'Uncheck this box if you prefer not to receive offers'", "Toggle that says 'Disable data sharing' but is off by default (meaning sharing is enabled)", "Consent statement combining cookie consent with marketing consent in a single checkbox"],
+          "patterns": []
+        },
+        {
+          "id": "S3.A5",
+          "name": "Choice Overload",
+          "level": "meso",
+          "definition": "Presenting an overwhelming number of options to make decision-making difficult, often steering users toward a default or recommended option.",
+          "what_to_look_for": "Excessive number of similar subscription tiers or pricing options (5+ plans where 2-3 would suffice); complex comparison matrices with many rows and columns; settings pages with dozens of individual toggles; permission screens requesting many granular permissions at once; cookie consent dialogs listing hundreds of individual cookies to toggle; pricing pages with decoy options designed to steer toward one plan. CMA classifies this under 'Choice Structure' — the sheer volume of options impairs deliberate decision-making.",
+          "detection_examples": ["Cookie consent panel with 200+ individual cookies to manage", "Pricing page with 6 tiers differentiated by minor features", "App permissions screen requesting 15+ individual permissions at once"],
+          "patterns": []
+        },
+        {
+          "id": "S3.A6",
+          "name": "Hidden Information",
+          "level": "meso",
+          "definition": "Placing critical information where users are unlikely to find it.",
+          "what_to_look_for": "Important terms (auto-renewal, cancellation fees, data retention) buried in collapsed accordion sections; key pricing conditions in footnotes or behind 'more info' links; cancellation terms in hard-to-read font sizes (below 10px); critical information requiring scrolling past marketing content; terms that contradict prominent claims hidden in expandable sections; important caveats placed below the fold or after a CTA button; greyed-out or low-contrast text for unfavourable terms. EDPB classifies this under 'Left in the Dark'. CMA classifies under 'Choice Information'. In HTML: look for `display:none`, `visibility:hidden`, extremely small `font-size` CSS on important text, or information placed in `<details>` elements that are collapsed by default.",
+          "detection_examples": ["Auto-renewal terms only visible after expanding a 'Terms' accordion at the bottom of the page", "Cancellation fee mentioned in 8px grey text below a large 'Subscribe' button", "Free trial terms hidden behind a 'Learn more' link that most users won't click"],
+          "patterns": []
+        },
+        {
+          "id": "S3.A7",
+          "name": "Language Inaccessibility",
+          "level": "meso",
+          "definition": "Using language that is difficult for users to understand due to complexity, jargon, or wrong language choice.",
+          "what_to_look_for": "Legal jargon in consumer-facing text; overly technical language; unclear terms.",
+          "patterns": [
+            {
+              "id": "S3.A7.P1",
+              "name": "Wrong Language",
+              "level": "low",
+              "definition": "Presenting important information in a language the user does not understand or has not selected.",
+              "visual_indicators": "Terms and conditions only in a language different from the site's main language; cookie consent in a non-local language; untranslated legal text.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S3.A7.P2",
+              "name": "Complex Language",
+              "level": "low",
+              "definition": "Using unnecessarily complex, technical, or legal language to make information difficult to understand.",
+              "visual_indicators": "Dense legal jargon in privacy policies shown to general users; overly technical descriptions of data practices; run-on sentences in terms of service.",
+              "severity_default": "Low"
+            }
+          ]
+        },
+        {
+          "id": "S3.A8",
+          "name": "Feedforward Ambiguity",
+          "level": "meso",
+          "definition": "Failing to provide clear information about what will happen when a user takes an action.",
+          "what_to_look_for": "Buttons with vague labels like 'Continue', 'Next', or 'OK' without explaining what happens next; subscription or purchase actions without clear price confirmation; actions whose consequences (charges, data sharing, account changes) are not explained beforehand; lack of confirmation screens for irreversible significant actions (deletion, purchase, subscription); 'Get Started' buttons that don't clarify whether clicking starts a trial, creates an account, or begins a purchase; ambiguous CTAs on landing pages. CMA flags this as failing to provide adequate 'Choice Information'.",
+          "detection_examples": ["'Continue' button in a checkout flow that doesn't show the total being charged", "'Get Started' button that immediately begins a paid subscription without confirmation", "Delete button with no confirmation dialog for irreversible data deletion"],
+          "patterns": []
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "name": "Forced Action",
+      "level": "high",
+      "definition": "Requiring users to perform a specific action to access or continue to access certain functionality, often unrelated to the task at hand.",
+      "regulatory_refs": [
+        { "framework": "EDPB", "categories": ["Overloading", "Fickle"] },
+        { "framework": "CMA", "category": "Choice Pressure" },
+        { "framework": "DSA", "category": "Distortion/Impairment of Autonomy" },
+        { "framework": "FTC", "category": "Making it difficult to cancel" }
+      ],
+      "angles": [
+        {
+          "id": "S4.A1",
+          "name": "Nagging",
+          "level": "meso",
+          "definition": "Repeatedly making the same request or suggestion, interrupting the user's intended task.",
+          "what_to_look_for": "Repeated pop-ups or modals asking to upgrade, subscribe, or enable notifications; persistent banners that reappear after dismissal (same session or across sessions); recurring prompts to rate or review the app; permission request dialogs that reappear after being denied; notification prompts that appear on every page load; email subscription pop-ups that appear repeatedly despite being closed; app update prompts that block core functionality. EDPB classifies this under 'Overloading > Continuous Prompting'. Brignull's original definition emphasises the repetitive, interruptive nature.",
+          "detection_examples": ["Newsletter popup that reappears every page load despite being dismissed", "App rating prompt that appears every 3rd session despite selecting 'Not now'", "Upgrade banner that returns within minutes of being closed"],
+          "patterns": []
+        },
+        {
+          "id": "S4.A2",
+          "name": "Forced Continuity",
+          "level": "meso",
+          "definition": "Silently charging users after a free trial ends or continuing a subscription without adequate notice.",
+          "what_to_look_for": "Free trial signup requiring credit card or payment details upfront; auto-renewal clauses without clear advance notice (FTC recommends notice before each renewal); no reminder email before trial-to-paid conversion; difficult-to-find cancellation before the renewal date; cancellation flow that requires more steps than signup; 'Cancel' button that leads to retention offers rather than actual cancellation; subscription that continues charging after user believed they cancelled. Mathur et al. (2019) found this among the most financially harmful patterns in e-commerce. FTC 2022 report specifically flags inadequate trial-to-paid disclosure.",
+          "detection_examples": ["'Start Free Trial' button that requires credit card entry", "Subscription that auto-renews with no cancellation reminder email", "Cancel button that leads to a 5-step retention flow instead of immediate cancellation"],
+          "patterns": []
+        },
+        {
+          "id": "S4.A3",
+          "name": "Forced Registration",
+          "level": "meso",
+          "definition": "Requiring users to create an account to access content or complete an action that doesn't inherently require one.",
+          "what_to_look_for": "Mandatory account creation to view content that was freely accessible before (e.g., recipes, articles behind a registration wall); requiring signup to complete a purchase with no guest checkout option; forcing account creation to access basic features like viewing prices or contacting support; requiring login to read product reviews; mandatory app download to access content available on the web. CMA flags this in their Online Choice Architecture report as an unnecessary barrier.",
+          "detection_examples": ["E-commerce site with no guest checkout option", "News site requiring registration to read articles", "App that requires account creation to view a restaurant menu"],
+          "patterns": []
+        },
+        {
+          "id": "S4.A4",
+          "name": "Forced Communication or Disclosure",
+          "level": "meso",
+          "definition": "Requiring users to share personal information or contact others as a condition of using a service.",
+          "what_to_look_for": "Requiring phone number for email service; mandatory profile completion; forcing social sharing to unlock features.",
+          "patterns": [
+            {
+              "id": "S4.A4.P1",
+              "name": "Privacy Zuckering",
+              "level": "low",
+              "definition": "Tricking users into sharing more personal information than they intend to.",
+              "visual_indicators": "Confusing privacy settings that default to public; settings that reset after updates; sharing toggles that are hard to find; opt-out language for data sharing.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S4.A4.P2",
+              "name": "Friend Spam",
+              "level": "low",
+              "definition": "Sending messages or invitations to a user's contacts under the guise of being from the user, without clear consent.",
+              "visual_indicators": "'Invite friends' flows that send messages without clear preview; importing contacts and auto-messaging; unclear consent for who gets contacted.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S4.A4.P3",
+              "name": "Address Book Leeching",
+              "level": "low",
+              "definition": "Accessing and storing a user's contacts without clear consent or beyond what is necessary.",
+              "visual_indicators": "Requesting contact access for unrelated features; storing contacts after one-time use; unclear scope of contact data usage.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S4.A4.P4",
+              "name": "Social Pyramid",
+              "level": "low",
+              "definition": "Requiring users to recruit others to unlock features or receive benefits.",
+              "visual_indicators": "'Refer 3 friends to unlock'; gated features requiring social sharing; multi-level referral programs; rewards only achievable through recruitment.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S4.A5",
+          "name": "Gamification",
+          "level": "meso",
+          "definition": "Using game-like mechanics to drive engagement or spending beyond the user's original intent.",
+          "what_to_look_for": "Streaks, rewards, badges designed to create habit loops; progress bars that encourage continued engagement; loss aversion mechanics.",
+          "patterns": [
+            {
+              "id": "S4.A5.P1",
+              "name": "Pay-to-Play",
+              "level": "low",
+              "definition": "Creating artificial barriers that can only be overcome through payment.",
+              "visual_indicators": "Energy/lives systems requiring payment to continue; paywalled content after investment of time; artificial wait times removable by payment.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S4.A5.P2",
+              "name": "Grinding",
+              "level": "low",
+              "definition": "Making progress extremely slow or tedious without payment, incentivizing users to pay to skip ahead.",
+              "visual_indicators": "Dramatically different progression rates for free vs paid users; tasks designed to be tediously repetitive; time-gates that can be skipped with money.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S4.A6",
+          "name": "Attention Capture",
+          "level": "meso",
+          "definition": "Capturing and holding user attention through mechanisms that bypass conscious choice.",
+          "what_to_look_for": "Features designed to keep users engaged beyond their intent; mechanisms that exploit psychological responses.",
+          "patterns": [
+            {
+              "id": "S4.A6.P1",
+              "name": "Auto-Play",
+              "level": "low",
+              "definition": "Automatically playing content (videos, next episodes, feeds) without user initiation.",
+              "visual_indicators": "Videos that play automatically on page load; auto-advancing to next episode with short countdown; infinite scroll feeds; auto-playing stories.",
+              "severity_default": "Low"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "name": "Social Engineering",
+      "level": "high",
+      "definition": "Using social or psychological pressure to influence user decisions.",
+      "regulatory_refs": [
+        { "framework": "EDPB", "category": "Stirring" },
+        { "framework": "CMA", "category": "Choice Pressure" },
+        { "framework": "DSA", "category": "Manipulation" },
+        { "framework": "FTC", "category": "Endorsements" }
+      ],
+      "angles": [
+        {
+          "id": "S5.A1",
+          "name": "Scarcity and Popularity Claims",
+          "level": "meso",
+          "definition": "Claiming that an item is scarce or popular to create pressure to act quickly.",
+          "what_to_look_for": "Stock level indicators; 'X people are viewing this'; 'selling fast' claims; popularity indicators that may be exaggerated or fabricated.",
+          "patterns": [
+            {
+              "id": "S5.A1.P1",
+              "name": "High Demand",
+              "level": "low",
+              "definition": "Displaying messages that claim high demand for a product or service, whether real or fabricated.",
+              "visual_indicators": "'X people are looking at this right now'; 'booked Y times today'; 'trending' labels; 'in high demand' badges.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S5.A2",
+          "name": "Social Proof",
+          "level": "meso",
+          "definition": "Using real or fabricated social signals to influence user decisions.",
+          "what_to_look_for": "Reviews, ratings, testimonials, usage statistics that may be manipulated, selective, or fabricated.",
+          "patterns": [
+            {
+              "id": "S5.A2.P1",
+              "name": "Low Stock",
+              "level": "low",
+              "definition": "Displaying low stock warnings to create urgency, whether real or fabricated.",
+              "visual_indicators": "'Only X left in stock'; 'selling fast'; 'almost gone'; stock indicators in red/warning colors; 'limited availability'.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S5.A2.P2",
+              "name": "Endorsements and Testimonials",
+              "level": "low",
+              "definition": "Using testimonials, endorsements, or reviews that may be fake, incentivized, or selectively presented.",
+              "visual_indicators": "Reviews without verified purchase badges; celebrity endorsements without disclosure; cherry-picked positive reviews; testimonials with stock photos.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S5.A2.P3",
+              "name": "Parasocial Pressure",
+              "level": "low",
+              "definition": "Leveraging perceived personal relationships (with influencers, creators, or fictional personas) to drive user decisions.",
+              "visual_indicators": "Influencer promotions framed as personal recommendations; AI chatbots that simulate friendship; personalized messages from brand mascots.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S5.A3",
+          "name": "Urgency",
+          "level": "meso",
+          "definition": "Creating a sense of time pressure to force quick decisions without adequate reflection.",
+          "what_to_look_for": "Countdown timers; limited-time offers; expiring deals; language emphasizing immediacy.",
+          "patterns": [
+            {
+              "id": "S5.A3.P1",
+              "name": "Activity Messages",
+              "level": "low",
+              "definition": "Displaying notifications about other users' recent actions to create social urgency.",
+              "visual_indicators": "'Someone in [city] just purchased...'; 'X people bought this in the last hour'; real-time purchase notifications; booking activity popups.",
+              "severity_default": "Medium"
+            },
+            {
+              "id": "S5.A3.P2",
+              "name": "Countdown Timer",
+              "level": "low",
+              "definition": "Displaying a countdown timer to create urgency around an offer or action, which may reset or be artificial.",
+              "visual_indicators": "Timer counting down to 'end of sale'; checkout countdown timers; timers that reset when they expire; timers on deals that are always available.",
+              "severity_default": "High"
+            },
+            {
+              "id": "S5.A3.P3",
+              "name": "Limited Time Message",
+              "level": "low",
+              "definition": "Displaying messages about limited-time availability without a specific countdown.",
+              "visual_indicators": "'Today only'; 'Offer ends soon'; 'Limited time offer'; 'Don't miss out'; 'Last chance' — especially when the offer recurs.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S5.A4",
+          "name": "Shaming",
+          "level": "meso",
+          "definition": "Using shame, guilt, or social pressure to influence user decisions.",
+          "what_to_look_for": "Language that makes users feel bad for declining; guilt-inducing decline options; social comparison pressure.",
+          "patterns": [
+            {
+              "id": "S5.A4.P1",
+              "name": "Confirmshaming",
+              "level": "low",
+              "definition": "Using guilt-inducing language on the option to decline an offer.",
+              "visual_indicators": "'No thanks, I don't want to save money'; 'I prefer to pay full price'; 'No, I don't care about my health'; decline options phrased to shame the user.",
+              "severity_default": "Medium"
+            }
+          ]
+        },
+        {
+          "id": "S5.A5",
+          "name": "Personalization",
+          "level": "meso",
+          "definition": "Using personal data to tailor choices, prices, or information in ways that may not serve the user's interests.",
+          "what_to_look_for": "Dynamic pricing based on browsing history, device type, or location (same product at different prices for different users); personalized urgency messages ('We noticed you viewed this — only 1 left!'); targeted upsells based on user profile or past purchases; algorithmically curated options that prioritise profit over user benefit; personalised discount offers that create artificial scarcity for individual users; recommendations based on engagement maximisation rather than user preferences; personalised push notifications timed to exploit habitual usage patterns. EDPB classifies this under 'Stirring' — using emotional triggers based on personal data. CMA flags under 'Choice Pressure'.",
+          "detection_examples": ["Different prices shown for the same flight depending on browser cookies", "Personalised 'Only for you — expires tonight' offer based on browsing history", "Recommendation algorithm that promotes higher-margin products over better-rated ones"],
+          "patterns": []
+        }
+      ]
+    }
+  ]
+}
