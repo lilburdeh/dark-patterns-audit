@@ -3,7 +3,13 @@
 from __future__ import annotations
 
 import base64
+import re
 from datetime import datetime
+
+
+def _strip_ids(text: str) -> str:
+    """Remove internal ontology IDs like (S2.A2.P3) or (S3.A2) from text."""
+    return re.sub(r'\s*\(S\d+\.A\d+(?:\.P\d+)?\)', '', text)
 
 
 def generate_markdown_report(
@@ -40,7 +46,8 @@ def generate_markdown_report(
     lines.append(
         "| **Framework** | Gray et al. (2024) An Ontology of Dark Patterns Knowledge (CHI '24) |"
     )
-    lines.append("| **Analyst** | Automated — Claude |")
+    model = metadata.get("model", "Claude")
+    lines.append(f"| **Analyst** | Automated — {model} |")
     lines.append("")
     lines.append("---")
     lines.append("")
@@ -57,17 +64,11 @@ def generate_markdown_report(
     lines.append(f"| Low | {summary.get('low', 0)} |")
     lines.append("")
 
-    # Analyst Notes in Executive Summary (bullet points)
+    # Limitations & Caveats in Executive Summary
     if confidence_notes:
-        lines.append("**Analyst Notes**")
+        lines.append("**Limitations & Caveats**")
         lines.append("")
-        sentences = [
-            s.strip()
-            for s in confidence_notes.replace(". ", ".|").split("|")
-            if s.strip()
-        ]
-        for s in sentences:
-            lines.append(f"- {s if s.endswith('.') else s + '.'}")
+        lines.append(_strip_ids(confidence_notes))
         lines.append("")
 
     lines.append("---")
@@ -83,7 +84,7 @@ def generate_markdown_report(
         "|---|---------|----------|-------|----------|----------|"
     )
     for i, f in enumerate(findings):
-        evidence = f.get("evidence", "")
+        evidence = _strip_ids(f.get("evidence", ""))
         lines.append(
             f"| {i + 1} | {f.get('pattern_name', '')} | "
             f"{f.get('strategy', '')} | {f.get('angle', '')} | "
@@ -113,31 +114,31 @@ def generate_markdown_report(
         lines.append("")
 
         lines.append("**Evidence:**")
-        lines.append(f.get("evidence", "No evidence provided."))
+        lines.append(_strip_ids(f.get("evidence", "No evidence provided.")))
         lines.append("")
 
         mechanism = f.get("behavioural_mechanism", "")
         if mechanism:
             lines.append("**Behavioural mechanism:**")
-            lines.append(mechanism)
+            lines.append(_strip_ids(mechanism))
             lines.append("")
 
         harm = f.get("harm_analysis", "")
         if harm:
             lines.append("**Why this is a dark pattern:**")
-            lines.append(harm)
+            lines.append(_strip_ids(harm))
             lines.append("")
 
         justification = f.get("severity_justification", "")
         if justification:
             lines.append("**Severity justification:**")
-            lines.append(justification)
+            lines.append(_strip_ids(justification))
             lines.append("")
 
         recommendation = f.get("recommendation", "")
         if recommendation:
             lines.append("**Recommendation:**")
-            lines.append(recommendation)
+            lines.append(_strip_ids(recommendation))
             lines.append("")
 
         reg_refs = f.get("regulatory_refs", [])

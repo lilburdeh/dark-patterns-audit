@@ -125,6 +125,7 @@ def run_audit(
     metadata = result.setdefault("audit_metadata", {})
     metadata.setdefault("audit_timestamp", datetime.now(timezone.utc).isoformat())
     metadata.setdefault("ontology_version", ontology.get("version", "1.0"))
+    metadata["model"] = MODEL
     if source_type == "url" and source_description:
         metadata.setdefault("url", source_description)
 

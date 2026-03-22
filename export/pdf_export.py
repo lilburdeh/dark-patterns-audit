@@ -2,11 +2,17 @@
 
 from __future__ import annotations
 
+import re
 from datetime import datetime
 
 from fpdf import FPDF
 
 from config.settings import SEVERITY_COLORS, REPORT_FOOTER
+
+
+def _strip_ids(text: str) -> str:
+    """Remove internal ontology IDs like (S2.A2.P3) or (S3.A2) from text."""
+    return re.sub(r'\s*\(S\d+\.A\d+(?:\.P\d+)?\)', '', text)
 
 
 def _sanitize(text: str) -> str:
@@ -116,7 +122,7 @@ def generate_pdf_report(audit_result: dict, image_bytes: bytes | None = None) ->
     meta_lines = [
         f"Date and time: {date_str}",
         f"Source: {source}",
-        "Analyst: Automated — Claude",
+        f"Analyst: Automated — {metadata.get('model', 'Claude')}",
     ]
     for line in meta_lines:
         pdf.cell(0, 6, line, ln=True)
@@ -148,20 +154,13 @@ def generate_pdf_report(audit_result: dict, image_bytes: bytes | None = None) ->
     pdf.cell(0, 6, f"  High: {high}  |  Medium: {medium}  |  Low: {low}", ln=True)
     pdf.ln(4)
 
-    # Analyst Notes (confidence_notes as bullet points)
+    # Limitations & Caveats
     if confidence_notes:
         pdf.set_font("Helvetica", "B", 11)
         pdf.set_text_color(0, 0, 0)
-        pdf.cell(0, 6, "Analyst Notes:", ln=True)
+        pdf.cell(0, 6, "Limitations & Caveats:", ln=True)
         pdf.set_font("Helvetica", "", 11)
-        sentences = [
-            s.strip()
-            for s in confidence_notes.replace(". ", ".|").split("|")
-            if s.strip()
-        ]
-        for s in sentences:
-            bullet = s if s.endswith(".") else s + "."
-            _bullet_item(pdf, bullet)
+        pdf.multi_cell(0, 6, _strip_ids(confidence_notes))
         pdf.ln(4)
     else:
         pdf.ln(2)
@@ -188,7 +187,7 @@ def generate_pdf_report(audit_result: dict, image_bytes: bytes | None = None) ->
         pdf.set_font("Helvetica", "", 8)
         pdf.set_text_color(0, 0, 0)  # black text in table rows
         for i, f in enumerate(findings):
-            evidence = f.get("evidence", "")
+            evidence = _strip_ids(f.get("evidence", ""))
             strategy = f.get("strategy", "")
             angle = f.get("angle", "")
             category = f"{strategy} > {angle}"
@@ -259,11 +258,11 @@ def generate_pdf_report(audit_result: dict, image_bytes: bytes | None = None) ->
             # Content sections
             pdf.set_text_color(0, 0, 0)
             sections = [
-                ("Evidence", f.get("evidence", "")),
-                ("Behavioural mechanism", f.get("behavioural_mechanism", "")),
-                ("Why this is a dark pattern", f.get("harm_analysis", "")),
-                ("Severity justification", f.get("severity_justification", "")),
-                ("Recommendation", f.get("recommendation", "")),
+                ("Evidence", _strip_ids(f.get("evidence", ""))),
+                ("Behavioural mechanism", _strip_ids(f.get("behavioural_mechanism", ""))),
+                ("Why this is a dark pattern", _strip_ids(f.get("harm_analysis", ""))),
+                ("Severity justification", _strip_ids(f.get("severity_justification", ""))),
+                ("Recommendation", _strip_ids(f.get("recommendation", ""))),
             ]
 
             for label, content in sections:

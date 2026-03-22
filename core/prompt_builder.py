@@ -102,7 +102,7 @@ OUTPUT_SCHEMA = """{
     "Forced Action": { "checked": true, "findings_count": 0 },
     "Social Engineering": { "checked": true, "findings_count": 0 }
   },
-  "confidence_notes": "Any patterns you were uncertain about, with explanation of what additional information would help confirm or rule them out"
+  "confidence_notes": "Any patterns you were uncertain about, with explanation of what additional information would help confirm or rule them out. Use pattern NAMES only (never internal IDs like S1.A1.P1 or S3.A2). Format as numbered paragraphs separated by newlines."
 }"""
 
 
@@ -148,7 +148,7 @@ Assign one of three severity levels to each finding:
 
 7. **Consider context.** A countdown timer on a live auction is legitimate; a countdown timer on an always-available product is deceptive. Context matters for severity assignment.
 
-8. **For meso-level patterns with no children** (e.g., Bad Defaults, Nagging, Forced Continuity), assess them directly and use the angle ID as the pattern_id.
+8. **For meso-level patterns with no children** (e.g., Bad Defaults, Nagging, Forced Continuity), assess them directly and use the angle ID as the pattern_id. In confidence_notes and all other text fields (evidence, harm_analysis, recommendation, etc.), use pattern NAMES only — never include internal IDs like S3.A2 or S1.A1.P1.
 
 9. **Map findings to regulatory frameworks.** For each finding, identify which regulatory frameworks are most relevant and populate the regulatory_refs field. Use the regulatory relevance noted in the ontology to connect findings to specific provisions:
    - **EDPB** (EU/GDPR): Overloading, Skipping, Stirring, Obstructing, Fickle, Left in the Dark

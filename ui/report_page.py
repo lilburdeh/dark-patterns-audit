@@ -2,9 +2,21 @@
 
 from __future__ import annotations
 
+import re
+
 import streamlit as st
 
 from ui.components import severity_badge, risk_banner, metric_card, regulatory_tag, severity_chart
+
+
+def _strip_ids(text: str) -> str:
+    """Remove internal ontology IDs like (S2.A2.P3) or (S3.A2) from text."""
+    return re.sub(r'\s*\(S\d+\.A\d+(?:\.P\d+)?\)', '', text)
+
+
+def _escape_dollars(text: str) -> str:
+    """Escape $ signs so Streamlit doesn't render LaTeX math."""
+    return text.replace("$", "\\$")
 
 
 def render_report(audit_result: dict, image_bytes: bytes | None = None) -> None:
@@ -61,21 +73,23 @@ def render_report(audit_result: dict, image_bytes: bytes | None = None) -> None:
         if total > 0:
             st.plotly_chart(severity_chart(summary), use_container_width=True)
 
-        # --- Analyst Notes (inside Executive Summary) ---
+        # --- Limitations & Caveats callout ---
         if confidence_notes:
-            st.markdown("**Analyst Notes**")
-            sentences = [
-                s.strip()
-                for s in confidence_notes.replace(". ", ".|").split("|")
-                if s.strip()
-            ]
-            if len(sentences) > 1:
-                bullet_md = "\n".join(
-                    f"- {s if s.endswith('.') else s + '.'}" for s in sentences
-                )
-                st.markdown(bullet_md)
-            else:
-                st.info(confidence_notes)
+            notes_html = _strip_ids(confidence_notes).replace('\n', '<br>')
+            st.markdown(
+                f"<div style='"
+                f"background:#F7F9FC;"
+                f"border-left:4px solid #6B7280;"
+                f"padding:14px 18px;"
+                f"border-radius:0 6px 6px 0;"
+                f"margin:16px 0 4px 0;"
+                f"'>"
+                f"<div style='font-weight:600;font-size:0.9rem;color:#374151;margin-bottom:6px;'>"
+                f"Limitations &amp; Caveats</div>"
+                f"<div style='font-size:0.9rem;color:#4B5563;line-height:1.6;'>{notes_html}</div>"
+                f"</div>",
+                unsafe_allow_html=True,
+            )
 
         # --- Findings Table ---
         if findings:
@@ -85,10 +99,8 @@ def render_report(audit_result: dict, image_bytes: bytes | None = None) -> None:
             for i, f in enumerate(findings):
                 rows_html += (
                     f"<tr>"
-                    f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;'>{i + 1}</td>"
-                    f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;'>{f.get('pattern_name', '')}</td>"
-                    f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;'>{f.get('strategy', '')}</td>"
-                    f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;'>{f.get('angle', '')}</td>"
+                    f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;color:#6B7280;font-size:0.8rem;'>{i + 1}</td>"
+                    f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;font-weight:500;'>{f.get('pattern_name', '')}</td>"
                     f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;'>{f.get('severity', '')}</td>"
                     f"<td style='padding:8px 6px;border-bottom:1px solid #e8e8e8;vertical-align:top;'>{f.get('evidence', '')}</td>"
                     f"</tr>"
@@ -97,11 +109,9 @@ def render_report(audit_result: dict, image_bytes: bytes | None = None) -> None:
                 "<table style='width:100%;border-collapse:collapse;font-size:0.9rem;'>"
                 "<thead><tr style='border-bottom:2px solid #d0d0d0;background:rgba(0,0,0,0.02);'>"
                 "<th style='text-align:left;padding:8px 6px;width:3%;'>#</th>"
-                "<th style='text-align:left;padding:8px 6px;width:13%;'>Pattern</th>"
-                "<th style='text-align:left;padding:8px 6px;width:16%;'>Strategy</th>"
-                "<th style='text-align:left;padding:8px 6px;width:16%;'>Angle</th>"
-                "<th style='text-align:left;padding:8px 6px;width:8%;'>Severity</th>"
-                "<th style='text-align:left;padding:8px 6px;width:44%;'>Evidence</th>"
+                "<th style='text-align:left;padding:8px 6px;width:18%;'>Pattern</th>"
+                "<th style='text-align:left;padding:8px 6px;width:9%;'>Severity</th>"
+                "<th style='text-align:left;padding:8px 6px;width:70%;'>Evidence</th>"
                 "</tr></thead>"
                 f"<tbody>{rows_html}</tbody>"
                 "</table>"
@@ -123,7 +133,7 @@ def render_report(audit_result: dict, image_bytes: bytes | None = None) -> None:
                     strategy = finding.get("strategy", "")
                     angle = finding.get("angle", "")
                     st.markdown(
-                        f"**Ontology path:** {strategy} > {angle} > {pattern_name} "
+                        f"**Ontology path:** {_escape_dollars(strategy)} > {_escape_dollars(angle)} > {_escape_dollars(pattern_name)} "
                         f"&nbsp;&nbsp; {severity_badge(severity)}",
                         unsafe_allow_html=True,
                     )
@@ -155,44 +165,48 @@ def render_report(audit_result: dict, image_bytes: bytes | None = None) -> None:
                             unsafe_allow_html=True,
                         )
 
-        # --- Methodology ---
-        with st.expander("Methodology", expanded=False):
-            st.markdown(
-                "**Primary framework:** Gray, C. M., Santos, C., Bielova, N., & Mildner, T. (2024). "
-                "*An Ontology of Dark Patterns Knowledge.* "
-                "CHI '24, ACM. — 65 patterns across 3 hierarchical levels."
-            )
-            st.markdown(
-                "**Supplementary sources:** Mathur et al. (2019) operationalised definitions "
-                "for text-based detection; EDPB Guidelines 03/2022, CMA Online Choice Architecture "
-                "(2022), EU DSA Article 25, and FTC Dark Patterns Report (2022) for "
-                "regulatory mapping."
-            )
-            st.markdown(
-                f"**Ontology version:** {metadata.get('ontology_version', '1.0')}"
-            )
-            st.markdown(
-                "**Severity rubric:**\n"
-                "- **High** — Actively deceptive or coercive. User is misled, "
-                "financially harmed, or unable to exercise meaningful choice.\n"
-                "- **Medium** — Manipulative but visible to attentive users. "
-                "Steers decisions through psychological pressure or interface design.\n"
-                "- **Low** — Nudge-like or borderline. Mild friction or pressure "
-                "without direct harm."
-            )
-            st.markdown(
-                "**Scope:** Static screenshot analysis. Multi-step flows were not tested."
-            )
-            st.markdown(
-                "**Screening disclaimer:** This tool is a screening and flagging system "
-                "that surfaces high-confidence detections for expert review. Findings are "
-                "not definitive classifications. Results should be verified by a qualified "
-                "reviewer before use in enforcement or compliance proceedings."
-            )
-
         # --- Export ---
         st.header("Export")
         _render_export_buttons(audit_result, image_bytes)
+
+    # --- Methodology (full-width, outside centred column) ---
+    st.divider()
+    with st.expander("Methodology", expanded=False):
+        st.markdown(
+            "**Primary framework:** Gray, C. M., Santos, C., Bielova, N., & Mildner, T. (2024). "
+            "*An Ontology of Dark Patterns Knowledge.* "
+            "CHI '24, ACM. — 65 patterns across 3 hierarchical levels."
+        )
+        st.markdown(
+            "**Supplementary sources:** Mathur et al. (2019) operationalised definitions "
+            "for text-based detection; EDPB Guidelines 03/2022, CMA Online Choice Architecture "
+            "(2022), EU DSA Article 25, and FTC Dark Patterns Report (2022) for "
+            "regulatory mapping."
+        )
+        st.markdown(
+            f"**Ontology version:** {metadata.get('ontology_version', '1.0')}"
+        )
+        st.markdown(
+            f"**Model:** {metadata.get('model', 'Claude')}"
+        )
+        st.markdown(
+            "**Severity rubric:**\n"
+            "- **High** — Actively deceptive or coercive. User is misled, "
+            "financially harmed, or unable to exercise meaningful choice.\n"
+            "- **Medium** — Manipulative but visible to attentive users. "
+            "Steers decisions through psychological pressure or interface design.\n"
+            "- **Low** — Nudge-like or borderline. Mild friction or pressure "
+            "without direct harm."
+        )
+        st.markdown(
+            "**Scope:** Static screenshot analysis. Multi-step flows were not tested."
+        )
+        st.markdown(
+            "**Screening disclaimer:** This tool is a screening and flagging system "
+            "that surfaces high-confidence detections for expert review. Findings are "
+            "not definitive classifications. Results should be verified by a qualified "
+            "reviewer before use in enforcement or compliance proceedings."
+        )
 
 
 def _finding_section(label: str, content: str) -> None:
@@ -205,7 +219,7 @@ def _finding_section(label: str, content: str) -> None:
         f'</div>',
         unsafe_allow_html=True,
     )
-    st.markdown(content)
+    st.markdown(_escape_dollars(_strip_ids(content)))
 
 
 

@@ -10,9 +10,9 @@ PROJECT_ROOT = Path(__file__).parent.parent
 ONTOLOGY_PATH = PROJECT_ROOT / "config" / "ontology.json"
 
 # Model
-MODEL = "claude-sonnet-4-20250514"
+MODEL = "claude-sonnet-4-6"
 TEMPERATURE = 0.1
-MAX_TOKENS = 4096
+MAX_TOKENS = 16384
 
 # Ontology
 ONTOLOGY_VERSION = "1.0"

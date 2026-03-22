@@ -70,7 +70,7 @@ with st.sidebar:
             "- [Mathur et al. (2019) — Dark Patterns at Scale](https://doi.org/10.1145/3359183) "
             "(CSCW '19) — 15 types, 11K sites crawled\n\n"
             "**Regulatory frameworks:**\n\n"
-            "- [EDPB Guidelines 03/2022](https://edpb.europa.eu/our-work-tools/documents/public-consultations/2022/guidelines-032022-deceptive-design-patterns_en) "
+            "- [EDPB Guidelines 03/2022](https://edpb.europa.eu/our-work-tools/our-documents/guidelines/guidelines-032022-deceptive-design-patterns-social-media_en) "
             "— EU/GDPR\n"
             "- [CMA Online Choice Architecture](https://www.gov.uk/government/publications/online-choice-architecture-how-digital-design-can-harm-competition-and-consumers) "
             "— UK\n"
